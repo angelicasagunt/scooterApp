@@ -1,6 +1,9 @@
-# flutter_app
+# SCOOTER APP 
 
-A new Flutter application.
+A nueva forma de transporte para el Caribe!.
+
+# SOMOS UNA APP PENSADA EN CUIDAR EL MEDIO AMBIENTE! 
+
 
 ## Getting Started
 
