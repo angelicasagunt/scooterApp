@@ -1,74 +1,56 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 void main() {
-  runApp(MyApp(
-    items: List<ListItem>.generate(
-      1000,
-          (i) => i % 6 == 0
-          ? HeadingItem("Heading $i")
-          : MessageItem("Sender $i", "Message body $i"),
-    ),
-  ));
+  debugPaintSizeEnabled = false; // Set to true for visual layout
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final List<ListItem> items;
-
-  MyApp({Key key, @required this.items}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final title = 'Mixed List';
-
     return MaterialApp(
-      title: title,
+      title: 'Flutter layout demo',
       home: Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          title: Text('Flutter layout demo'),
         ),
-        body: ListView.builder(
-          // Let the ListView know how many items it needs to build.
-          itemCount: items.length,
-          // Provide a builder function. This is where the magic happens.
-          // Convert each item into a widget based on the type of item it is.
-          itemBuilder: (context, index) {
-            final item = items[index];
-
-            if (item is HeadingItem) {
-              return ListTile(
-                title: Text(
-                  item.heading,
-                  style: Theme.of(context).textTheme.headline,
-                ),
-              );
-            } else if (item is MessageItem) {
-              return ListTile(
-                title: Text(item.sender),
-                subtitle: Text(item.body),
-              );
-            }
-          },
-        ),
+        body: Center(child: _buildImageColumn()),
       ),
     );
   }
-}
 
-// The base class for the different types of items the list can contain.
-abstract class ListItem {}
+  // #docregion column
+  Widget _buildImageColumn() => Container(
+    decoration: BoxDecoration(
+      color: Colors.black26,
+    ),
+    child: Column(
+      children: [
+        _buildImageRow(1),
+        _buildImageRow(3),
+      ],
+    ),
+  );
+  // #enddocregion column
 
-// A ListItem that contains data to display a heading.
-class HeadingItem implements ListItem {
-  final String heading;
+  // #docregion row
+  Widget _buildDecoratedImage(int imageIndex) => Expanded(
+    child: Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 10, color: Colors.black38),
+        borderRadius: const BorderRadius.all(const Radius.circular(8)),
+      ),
+      margin: const EdgeInsets.all(4),
+      child: Image.asset('images/pic$imageIndex.jpg'),
+    ),
+  );
 
-  HeadingItem(this.heading);
-}
-
-// A ListItem that contains data to display a message.
-class MessageItem implements ListItem {
-  final String sender;
-  final String body;
-
-  MessageItem(this.sender, this.body);
+  Widget _buildImageRow(int imageIndex) => Row(
+    children: [
+      _buildDecoratedImage(imageIndex),
+      _buildDecoratedImage(imageIndex + 1),
+    ],
+  );
+// #enddocregion row
 }
